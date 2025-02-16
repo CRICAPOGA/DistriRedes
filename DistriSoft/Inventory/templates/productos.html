@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}CATALOGO DE PRODUCTOS{% endblock %}
+
+{% block content %}
+    <h1>CATALOGO DE PRODUCTOS</h1>
+    <div>
+        <h2>Categorías</h2>
+        <ul>
+            {% for categoria in categorias %}
+                <li><a href="{% url 'productos_por_categoria' categoria.id %}">{{ categoria.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripcion</th>
+                <th>Imagen</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in productos %}
+                <tr>
+                    <td>{{ producto.name }}</td>
+                    <td>{{ producto.description }}</td>
+                    <td><img src="{{ producto.image.url }}" alt="{{ producto.name }}" width="100"></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
