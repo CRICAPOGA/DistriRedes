@@ -3,6 +3,9 @@
 {% block title %}INDEX{% endblock %}
 
 {% block content %}
+{% if messages %} {% for message in messages %}
+<strong style="color: red">{{message}}</strong>
+{% endfor %} {% endif %}
 <h1>Bienvenido a la Página de Inicio</h1>
 <a href="{% url 'productos' %}">Cotizar productos</a>
 {% endblock %}

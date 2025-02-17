@@ -4,6 +4,13 @@
 
 {% block content %}
     <h1>CATALOGO DE PRODUCTOS</h1>
+    {% if messages %}
+        <div class="alert alert-success">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
     <div>
         <h2>Categorías</h2>
         <ul>
@@ -12,12 +19,14 @@
             {% endfor %}
         </ul>
     </div>
+    <a href="{% url 'crear_producto' %}" class="btn btn-success">Crear Producto</a>
     <table class="table table-striped">
         <thead>
             <tr>
                 <th>Nombre</th>
                 <th>Descripcion</th>
                 <th>Imagen</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -26,6 +35,10 @@
                     <td>{{ producto.name }}</td>
                     <td>{{ producto.description }}</td>
                     <td><img src="{{ producto.image.url }}" alt="{{ producto.name }}" width="100"></td>
+                    <td>
+                        <a href="{% url 'editar_producto' producto.id %}">Editar</a>
+                        <a href="{% url 'eliminar_producto' producto.id %}">Eliminar</a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

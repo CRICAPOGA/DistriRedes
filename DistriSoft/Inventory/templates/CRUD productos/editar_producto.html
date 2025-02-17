@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Producto{% endblock %}
+
+{% block content %}
+    <h1>Editar Producto</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="id_name">Nombre:</label>
+        <input type="text" id="id_name" name="name" value="{{ producto.name }}">
+
+        <label for="id_description">Descripción:</label>
+        <textarea id="id_description" name="description">{{ producto.description }}</textarea>
+
+        <label for="id_image">Imagen:</label>
+        <input type="file" id="id_image" name="image">
+
+        <label for="id_category">Categoría:</label>
+        <select id="id_category" name="category">
+            {% for categoria in categorias %}
+                <option value="{{ categoria.id }}" {% if categoria.id == producto.category.id %}selected{% endif %}>{{ categoria.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+    </form>
+{% endblock %}
