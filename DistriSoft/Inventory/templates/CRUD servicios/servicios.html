@@ -11,6 +11,10 @@
             {% endfor %}
         </div>
     {% endif %}
+    <form method="GET" action="{% url 'buscar_servicios' %}">
+        <input type="text" name="q" placeholder="Buscar servicios..." value="{{ query|default:'' }}">
+        <button type="submit">Buscar</button>
+    </form>
     <a href="{% url 'crear_servicio' %}" class="btn btn-success">Crear Servicio</a>
     <table class="table table-striped">
         <thead>
