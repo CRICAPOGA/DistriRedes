@@ -25,7 +25,7 @@ urlpatterns = [
     path('inventory/', include('Inventory.urls')),
 ]
 '''
-    path('inventory/', include('Inventory.urls')),
+APPS NO IMPLEMENTADAS AÚN
     path('orders/', include('Orders.urls')),
     path('reports/', include('Reports.urls'))
 '''
