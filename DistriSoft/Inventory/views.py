@@ -61,6 +61,13 @@ def crear_producto(request):
     
     return render(request, 'CRUD productos/crear_producto.html', {'categorias': categorias})
 
+@login_required
+def buscar_productos(request):
+    query = request.GET.get('buscar_producto')
+    productos = Producto.objects.filter(name__icontains=query) if query else Producto.objects.all()
+    categorias = Categoria.objects.all()
+    return render(request, 'CRUD productos/productos.html', {'productos': productos, 'categorias': categorias, 'query': query})
+
 ############## CRUD INSUMOS ##############
 ############## CRUD SERVICIOS ##############
 @login_required
@@ -104,3 +111,9 @@ def crear_servicio(request):
         return redirect('servicios')
     
     return render(request, 'CRUD servicios/crear_servicio.html')
+
+@login_required
+def buscar_servicios(request):
+    query = request.GET.get('q')
+    servicios = Servicio.objects.filter(name__icontains=query) if query else Servicio.objects.all()
+    return render(request, 'CRUD servicios/servicios.html', {'servicios': servicios, 'query': query})

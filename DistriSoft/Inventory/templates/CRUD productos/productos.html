@@ -11,6 +11,10 @@
             {% endfor %}
         </div>
     {% endif %}
+    <form method="GET" action="{% url 'buscar_productos' %}">
+        <input type="text" name="buscar_producto" placeholder="Buscar productos..." value="{{ query|default:'' }}">
+        <button type="submit">Buscar</button>
+    </form>
     <div>
         <h2>Categorías</h2>
         <ul>
