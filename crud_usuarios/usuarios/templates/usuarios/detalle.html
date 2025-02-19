@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Detalle del Usuario</h2>
+    <p><strong>Nombre:</strong> {{ object.nombre }}</p>
+    <p><strong>Email:</strong> {{ object.email }}</p>
+    <a href="{% url 'usuarios_lista' %}">Volver</a>
+{% endblock %}
