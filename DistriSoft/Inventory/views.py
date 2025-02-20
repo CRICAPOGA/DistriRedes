@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Producto, Categoria, Servicio
+from .models import Producto, Categoria
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
@@ -61,59 +61,5 @@ def crear_producto(request):
     
     return render(request, 'CRUD productos/crear_producto.html', {'categorias': categorias})
 
-@login_required
-def buscar_productos(request):
-    query = request.GET.get('buscar_producto')
-    productos = Producto.objects.filter(name__icontains=query) if query else Producto.objects.all()
-    categorias = Categoria.objects.all()
-    return render(request, 'CRUD productos/productos.html', {'productos': productos, 'categorias': categorias, 'query': query})
-
 ############## CRUD INSUMOS ##############
 ############## CRUD SERVICIOS ##############
-@login_required
-def servicios(request):
-    servicios = Servicio.objects.all()
-    return render(request, 'CRUD servicios/servicios.html', {'servicios': servicios})
-
-@login_required
-def eliminar_servicio(request, servicio_id):
-    servicio = get_object_or_404(Servicio, id=servicio_id)
-    if request.method == 'POST':
-        servicio.delete()
-        messages.success(request, f'El servicio "{servicio.name}" ha sido eliminado exitosamente.')
-        return redirect('servicios')
-    return render(request, 'CRUD servicios/eliminar_servicio.html', {'servicio': servicio})
-
-@login_required
-def editar_servicio(request, servicio_id):
-    servicio = get_object_or_404(Servicio, id=servicio_id)
-    
-    if request.method == 'POST':
-        servicio.name = request.POST.get('name')
-        servicio.description = request.POST.get('description')
-        servicio.price = request.POST.get('price')
-        servicio.save()
-        messages.success(request, f'El servicio "{servicio.name}" ha sido actualizado exitosamente.')
-        return redirect('servicios')
-    
-    return render(request, 'CRUD servicios/editar_servicio.html', {'servicio': servicio})
-
-@login_required
-def crear_servicio(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        description = request.POST.get('description')
-        price = request.POST.get('price')
-        
-        servicio = Servicio(name=name, description=description, price=price)
-        servicio.save()
-        messages.success(request, f'El servicio "{servicio.name}" ha sido creado exitosamente.')
-        return redirect('servicios')
-    
-    return render(request, 'CRUD servicios/crear_servicio.html')
-
-@login_required
-def buscar_servicios(request):
-    query = request.GET.get('q')
-    servicios = Servicio.objects.filter(name__icontains=query) if query else Servicio.objects.all()
-    return render(request, 'CRUD servicios/servicios.html', {'servicios': servicios, 'query': query})

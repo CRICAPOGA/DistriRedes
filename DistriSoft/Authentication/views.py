@@ -2,7 +2,6 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
 from .models import Usuario
 
 # Create your views here.
@@ -39,7 +38,6 @@ def register_view(request):
     
     return render(request, 'register.html')
 
-@login_required
 def logout_view(request):
     logout(request)
     return redirect('home')
