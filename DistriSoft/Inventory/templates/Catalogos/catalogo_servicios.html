@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}CATÁLOGO DE SERVICIOS{% endblock %}
+
+{% load static %}
+
+{% block content %}
+<div class="container-fluid d-flex justify-content-center align-items-center min-vh-100 px-3"
+    style="background: linear-gradient(135deg, #007bff, #28a745);">
+    <div class="card shadow-lg bg-white rounded-4 p-4 m-4 col-lg-11 col-md-10 col-sm-12">
+        <h2 class="text-center text-primary fw-bold mt-2 mb-4">Catálogo de Servicios</h2>
+        <hr class="border-1 opacity-75 mt-1">
+
+        <!-- Filtros -->
+        <div class="row mb-3 align-items-center">
+            <div class="col-md-6">
+                <form method="GET" action="{% url 'buscar_servicios' %}">
+                    <input type="text" class="form-control border-primary" name="buscar_servicio"
+                        placeholder="Buscar servicios..." value="{{ query|default:'' }}">
+                </form>
+            </div>
+        </div>
+
+        <!-- Mostrar servicios en tarjetas -->
+        <div class="row">
+            {% for servicio in servicios %}
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ servicio.name }}</h5>
+                        <p class="card-text">{{ servicio.description }}</p>
+                        <p class="card-price text-success">Precio: ${{ servicio.price|floatformat:2 }}</p> 
+                        <button class="btn btn-primary select-service" data-service-id="{{ servicio.id }}" data-price="{{ servicio.price }}">Seleccionar</button>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-center">No hay servicios disponibles.</p>
+            {% endfor %}
+        </div>
+
+        <div class="mt-4">
+            <hr>
+            <h4>Servicios Seleccionados</h4>
+            <hr>
+            <table class="table table-bordered" id="cotizacion-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Precio</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Los servicios seleccionados aparecerán aquí -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="text-center mb-3">
+            <button id="cotizar-btn" class="btn btn-success">Solicitar Cotización</button>
+        </div>
+        
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const selectedServices = [];
+
+        // Manejar la selección de servicios
+        const selectButtons = document.querySelectorAll('.select-service');
+        selectButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const serviceId = button.getAttribute('data-service-id'); // Obtener el id del servicio
+                const price = parseFloat(button.getAttribute('data-price')); // Obtener el precio
+                //si no esta en la lista
+                if (!selectedServices.some(service => service.id === serviceId)) {
+                    selectedServices.push({ id: serviceId, price: price });
+
+                    // Añadir el servicio a la tabla de cotización
+                    const row = document.createElement('tr'); 
+                    row.setAttribute('data-service-id', serviceId);
+                    row.innerHTML = `
+                        <td>${button.closest('.card-body').querySelector('.card-title').textContent}</td>
+                        <td>${button.closest('.card-body').querySelector('.card-text').textContent}</td>
+                        <td>$${price.toFixed(2)}</td> <!-- Mostrar el precio -->
+                        <td><button class="btn btn-danger remove-service">Eliminar</button></td>
+                    `;
+                    document.querySelector('#cotizacion-table tbody').appendChild(row); //añade fila a la tabla
+                }
+            });
+        });
+
+        // Eliminar servicio de la cotización
+        document.querySelector('#cotizacion-table').addEventListener('click', function(event) {
+            if (event.target.classList.contains('remove-service')) {
+                const row = event.target.closest('tr'); //obtener fila
+                const serviceId = row.getAttribute('data-service-id'); //obtener id
+                const index = selectedServices.findIndex(service => service.id === serviceId); //buscar en el array
+                if (index > -1) {
+                    selectedServices.splice(index, 1);
+                }
+                row.remove();
+            }
+        });        
+    });
+</script>
+{% endblock %}

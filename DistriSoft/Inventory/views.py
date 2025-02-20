@@ -117,3 +117,39 @@ def buscar_servicios(request):
     query = request.GET.get('q')
     servicios = Servicio.objects.filter(name__icontains=query) if query else Servicio.objects.all()
     return render(request, 'CRUD servicios/servicios.html', {'servicios': servicios, 'query': query})
+
+
+#######CATALOGO PRODUCTOS##########
+@login_required
+def catalogo_productos(request):
+    productos = Producto.objects.all()
+    categorias = Categoria.objects.all()
+    return render(request, 'Catalogos/catalogo_productos.html', {'productos': productos, 'categorias': categorias})
+
+@login_required
+def catalogo_p_categoria(request, categoria_id):
+    categoria = Categoria.objects.get(id=categoria_id)
+    productos = Producto.objects.filter(category=categoria)
+    categorias = Categoria.objects.all()
+    return render(request, 'Catalogos/catalogo_productos.html', {'productos': productos, 'categorias': categorias, 'categoria': categoria})
+
+@login_required
+def catalogo_p_buscar(request):
+    query = request.GET.get('buscar_product')
+    productos = Producto.objects.filter(name__icontains=query) if query else Producto.objects.all()
+    categorias = Categoria.objects.all()
+    return render(request, 'Catalogos/catalogo_productos.html', {'productos': productos, 'categorias': categorias, 'query': query})
+
+
+#######CATALOGO SERVICIOS##########
+
+@login_required
+def catalogo_servicios(request):
+    servicios = Servicio.objects.all()
+    return render(request, 'Catalogos/catalogo_servicios.html', {'servicios': servicios})
+
+@login_required
+def catalogo_s_buscar(request):
+    query = request.GET.get('q')
+    servicios = Servicio.objects.filter(name__icontains=query) if query else Servicio.objects.all()
+    return render(request, 'Catalogos/catalogo_servicios.html', {'servicios': servicios, 'query': query})
