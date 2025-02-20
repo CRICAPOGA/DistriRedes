@@ -44,10 +44,12 @@ def logout_view(request):
     logout(request)
     return redirect('home')
 
+
+########## CRUD USUARIOS ##########
 @login_required
 def lista_usuarios(request):
     usuarios = Usuario.objects.all()
-    return render(request, 'lista_usuarios.html', {'usuarios': usuarios})
+    return render(request, 'CRUD usuarios/lista_usuarios.html', {'usuarios': usuarios})
 
 @login_required
 def crear_usuario(request):
@@ -64,7 +66,7 @@ def crear_usuario(request):
         messages.success(request, 'Usuario creado exitosamente')
         return redirect('lista_usuarios')
     
-    return render(request, 'crear_usuario.html')
+    return render(request, 'CRUD usuarios/crear_usuario.html')
 
 @login_required
 def editar_usuario(request, usuario_id):
@@ -80,7 +82,7 @@ def editar_usuario(request, usuario_id):
         messages.success(request, 'Usuario actualizado exitosamente')
         return redirect('lista_usuarios')
     
-    return render(request, 'editar_usuario.html', {'usuario': usuario})
+    return render(request, 'CRUD usuarios/editar_usuario.html', {'usuario': usuario})
 
 @login_required
 def eliminar_usuario(request, usuario_id):
