@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Usuarios{% endblock %}
+
+{% block content %}
+<h1>Lista de Usuarios</h1>
+<a href="{% url 'crear_usuario' %}">Crear Usuario</a>
+<table>
+    <tr>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Address</th>
+        <th>Phone</th>
+        <th>Acciones</th>
+    </tr>
+    {% for usuario in usuarios %}
+    <tr>
+        <td>{{ usuario.user.username }}</td>
+        <td>{{ usuario.user.email }}</td>
+        <td>{{ usuario.address }}</td>
+        <td>{{ usuario.phone }}</td>
+        <td>
+            <a href="{% url 'editar_usuario' usuario.id %}">Editar</a>
+            <a href="{% url 'eliminar_usuario' usuario.id %}">Eliminar</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
