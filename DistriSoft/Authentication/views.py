@@ -43,3 +43,50 @@ def register_view(request):
 def logout_view(request):
     logout(request)
     return redirect('home')
+
+@login_required
+def lista_usuarios(request):
+    usuarios = Usuario.objects.all()
+    return render(request, 'lista_usuarios.html', {'usuarios': usuarios})
+
+@login_required
+def crear_usuario(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        email = request.POST['email']
+        address = request.POST['address']
+        phone = request.POST['phone']
+        
+        user = User.objects.create_user(username=username, password=password, email=email)
+        Usuario.objects.create(user=user, address=address, phone=phone)
+        
+        messages.success(request, 'Usuario creado exitosamente')
+        return redirect('lista_usuarios')
+    
+    return render(request, 'crear_usuario.html')
+
+@login_required
+def editar_usuario(request, usuario_id):
+    usuario = Usuario.objects.get(id=usuario_id)
+    if request.method == 'POST':
+        usuario.user.username = request.POST['username']
+        usuario.user.email = request.POST['email']
+        usuario.address = request.POST['address']
+        usuario.phone = request.POST['phone']
+        usuario.user.save()
+        usuario.save()
+        
+        messages.success(request, 'Usuario actualizado exitosamente')
+        return redirect('lista_usuarios')
+    
+    return render(request, 'editar_usuario.html', {'usuario': usuario})
+
+@login_required
+def eliminar_usuario(request, usuario_id):
+    usuario = Usuario.objects.get(id=usuario_id)
+    usuario.user.delete()
+    usuario.delete()
+    
+    messages.success(request, 'Usuario eliminado exitosamente')
+    return redirect('lista_usuarios')
