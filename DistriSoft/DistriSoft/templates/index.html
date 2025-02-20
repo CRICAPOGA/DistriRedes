@@ -3,12 +3,14 @@
 {% block title %}INDEX{% endblock %}
 {% block content %}
 {% if messages %}
-{% for message in messages %}
-<div class="alert alert-danger alert-dismissible fade show" role="alert">
-    {{ message }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<div class="container mt-3">
+    {% for message in messages %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
 </div>
-{% endfor %}
 {% endif %}
 <div class="bg-primary text-white text-center py-5 w-100">
     <h1>¡Bienvenido a Nuestra Plataforma!</h1>
