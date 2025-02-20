@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Pedidos{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <strong>
+        <p class="text-center h1" style="color:  rgb(49, 109, 161); padding: 10px;">Pedidos</p>
+    </strong>
+    <table class="table table-striped" style="padding: 50px;">
+        <thead>
+            <tr>
+                <th>Pedido</th>
+                <th>Fecha</th>
+                <th>Estado del pedido</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%comment%}
+            {% for producto in productos %}
+            <tr>
+                <td>{{ producto.name }}</td>
+                <td>{{ producto.description }}</td>
+                <td>
+                    <div class="container mt-4">
+                        <h2 class="mb-3"></h2>
+                        <p id="estado" class="fw-bold text-danger">Pendiente</p>
+                        <button id="btnEstado" class="btn btn-success">Marcar como Recibido</button>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            {%endcomment%}
+        </tbody>
+    </table>
+
+    <script>
+        document.getElementById("btnEstado").addEventListener("click", function () {
+            let estado = document.getElementById("estado");
+            if (estado.textContent === "Pendiente") {
+                estado.textContent = "Recibido";
+                estado.classList.remove("text-danger");
+                estado.classList.add("text-success");
+                this.textContent = "Pedido Recibido";
+                this.disabled = true; // Deshabilita el botón después de cambiar el estado
+            }
+        });
+    </script>
+</body>
+
+</html>
+{% endblock %}
