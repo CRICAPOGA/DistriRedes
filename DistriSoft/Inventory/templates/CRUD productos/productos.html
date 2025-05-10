@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}CATÁLOGO DE PRODUCTOS{% endblock %}
+
+<!--Carga instruccion bloque js-->
+{% load static %}
+
+{% block content %}
+<div class="container-fluid d-flex justify-content-center align-items-center min-vh-100 px-3" 
+     style="background: linear-gradient(135deg, #007bff, #28a745);">
+    <div class="card shadow-lg bg-white rounded-4 p-4 m-4 col-lg-9 col-md-10 col-sm-12">
+        <h2 class="text-center text-primary fw-bold mt-2 mb-4">Gestión de Productos</h2>
+        <hr class="border-1 opacity-75 mt-1">
+        
+        <!-- Notificaciones -->
+        {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+        
+        <!-- Filtros -->
+        <div class="row mb-3 align-items-center">
+            <div class="col-md-6">
+                <form method="GET" action="{% url 'buscar_productos' %}">
+                    <input type="text" class="form-control border-primary" name="buscar_producto" 
+                           placeholder="Buscar productos..." value="{{ query|default:'' }}">
+                </form>
+            </div>
+            <div class="col-md-4">
+                <select class="form-select border-primary p-2" style="border-radius: 6px;"  id="category-filter" onchange="location = this.value;">
+                    <option value="{% url 'productos' %}" {% if not categoria %}selected{% endif %}>Todas las categorías</option>
+                    {% for categoria_item in categorias %}
+                        <option value="{% url 'productos_por_categoria' categoria_item.id %}" 
+                            {% if categoria and categoria.id == categoria_item.id %}selected{% endif %}>
+                            {{ categoria_item.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2 text-end">
+                <a href="{% url 'crear_producto' %}" class="btn btn-success fw-bold shadow"> + Agregar </a>
+            </div>
+        </div>
+
+        <!-- Tabla de Productos -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover rounded-3 overflow-hidden">
+                <thead class="text-white" style="background-color: rgba(17, 95, 198, 0.947);">
+                    <tr>
+                        <th class="text-center">Imagen</th>
+                        <th class="text-center">Nombre</th>
+                        <th class="text-center">Descripción</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for producto in productos %}
+                        <tr>
+                            <td class="text-center">
+                                {% if producto.image %}
+                                    <img src="{{ producto.image.url }}" alt="{{ producto.name }}" class="rounded" width="100">
+                                {% else %}
+                                    <span class="text-muted">Sin imagen</span>
+                                {% endif %}
+                            </td>
+                            
+                            <td class="align-middle">{{ producto.name }}</td>
+                            <td class="align-middle">{{ producto.description }}</td>
+                            <td class="text-center align-middle">
+                                <a href="{% url 'editar_producto' producto.id %}" class="btn btn-warning btn-sm fw-bold shadow-sm mb-3">Editar</a>
+                                <a href="{% url 'eliminar_producto' producto.id %}" class="btn btn-danger btn-sm fw-bold shadow-sm">Eliminar</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

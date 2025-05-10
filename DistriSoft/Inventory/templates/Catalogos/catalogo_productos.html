@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block title %}CATÁLOGO DE PRODUCTOS{% endblock %}
+
+{% load static %}
+
+{% block content %}
+<div class="container-fluid d-flex justify-content-center align-items-center min-vh-100 px-3"
+    style="background: linear-gradient(135deg, #007bff, #28a745);">
+    <div class="card shadow-lg bg-white rounded-4 p-4 m-4 col-lg-11 col-md-10 col-sm-12">
+        <h2 class="text-center text-primary fw-bold mt-2 mb-4">Catálogo de Productos</h2>
+        <hr class="border-1 opacity-75 mt-1">
+
+        <!-- Filtros -->
+        <div class="row mb-3 align-items-center">
+            <div class="col-md-6">
+                <form method="GET" action="{% url 'catalogo_p_buscar' %}">
+                    <input type="text" class="form-control border-primary" name="buscar_producto"
+                        placeholder="Buscar productos..." value="{{ query|default:'' }}">
+                </form>
+            </div>
+            <div class="col-md-4">
+                <select class="form-select border-primary p-2" style="border-radius: 6px;" id="category-filter"
+                    onchange="location = this.value;">
+                    <option value="{% url 'catalogo_productos' %}" {% if not categoria %}selected{% endif %}>Todas las categorías
+                    </option>
+                    {% for categoria_item in categorias %}
+    <option value="{% url 'productos_por_categoria' categoria_item.id %}" 
+        {% if categoria and categoria.id == categoria_item.id %}
+            selected
+        {% endif %}>
+        {{ categoria_item.name }}
+    </option>
+{% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Mostrar productos en tarjetas -->
+        <div class="row">
+            {% for producto in productos %}
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card">
+                    {% if producto.image %}
+                    <img src="{{ producto.image.url }}" class="card-img-top" alt="{{ producto.name }}">
+                    {% else %}
+                    <img src="{% static 'img/default-product.jpg' %}" class="card-img-top" alt="Imagen no disponible">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ producto.name }}</h5>
+                        <p class="card-text">{{ producto.description }}</p>
+                        <button class="btn btn-primary select-product"
+                            data-product-id="{{ producto.id }}">Seleccionar</button>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-center">No hay productos disponibles.</p>
+            {% endfor %}
+        </div>
+        <div class="mt-4">
+            <hr>
+            <h4>Productos Seleccionados</h4>
+            <hr>
+            <table class="table table-bordered" id="cotizacion-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Cantidad</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Los productos seleccionados aparecerán aquí -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="text-center mb-3">
+            <button id="cotizar-btn" class="btn btn-success">Solicitar Cotización</button>
+        </div>
+        
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const selectedProducts = [];
+
+        // Manejar la selección de productos
+        const selectButtons = document.querySelectorAll('.select-product');
+        selectButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = button.getAttribute('data-product-id');
+                if (!selectedProducts.includes(productId)) {
+                    selectedProducts.push(productId);
+
+                    // Añadir el producto a la tabla de cotización
+                    const row = document.createElement('tr');
+                    row.setAttribute('data-product-id', productId);
+                    row.innerHTML = `
+                        <td>${button.closest('.card-body').querySelector('.card-title').textContent}</td>
+                        <td>${button.closest('.card-body').querySelector('.card-text').textContent}</td>
+                        <td><input type="number" class="form-control quantity-input" value="1" min="1"></td>
+                        <td><button class="btn btn-danger remove-product">Eliminar</button></td>
+                    `;
+                    document.querySelector('#cotizacion-table tbody').appendChild(row);
+                }
+            });
+        });
+
+        // Eliminar producto de la cotización
+        document.querySelector('#cotizacion-table').addEventListener('click', function(event) {
+            if (event.target.classList.contains('remove-product')) {
+                const row = event.target.closest('tr');
+                const productId = row.getAttribute('data-product-id');
+                const index = selectedProducts.indexOf(productId);
+                if (index > -1) {
+                    selectedProducts.splice(index, 1);
+                }
+                row.remove();
+            }
+        });
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Crear Usuario{% endblock %}
+
+{% block content %}
+<div class="container-fluid d-flex justify-content-center align-items-center min-vh-100 px-3" 
+     style="background: linear-gradient(135deg, #007bff, #28a745);">
+    <div class="card shadow-lg bg-white rounded-4 p-4 m-4 col-lg-6 col-md-8 col-sm-10 d-flex flex-column flex-grow-1">
+        <h2 class="text-center text-primary fw-bold mb-4">Crear Usuario</h2>
+        <hr class="border-1 opacity-75">
+        <form method="post" class="d-flex flex-column flex-grow-1">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="username" class="form-label text-dark fw-bold">Username:</label>
+                <input type="text" id="username" name="username" class="form-control border-primary" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label text-dark fw-bold">Email:</label>
+                <input type="email" id="email" name="email" class="form-control border-primary" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="address" class="form-label text-dark fw-bold">Address:</label>
+                <input type="text" id="address" name="address" class="form-control border-primary" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="phone" class="form-label text-dark fw-bold">Phone:</label>
+                <input type="text" id="phone" name="phone" class="form-control border-primary" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label text-dark fw-bold">Password:</label>
+                <input type="password" id="password" name="password" class="form-control border-primary" required>
+            </div>
+
+            <div class="d-flex justify-content-center flex-wrap mt-4">
+                <a href="{% url 'lista_usuarios' %}" class="btn btn-danger px-4 mx-2 fw-bold shadow">Cancelar</a>
+                <button type="submit" class="btn btn-success px-4 mx-2 fw-bold shadow">Crear Usuario</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

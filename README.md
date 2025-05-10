@@ -29,9 +29,9 @@ Se ha adoptado la metodología  **SCRUM** , dividiendo el desarrollo en sprints 
 
 ## Tecnologías Utilizadas
 
-* **Backend** :
+* **Backend** : Django
 * **Frontend** : Bootstrap
-* **Base de datos** :
+* **Base de datos** : SQLite3
 * **Control de versiones** : Git y GitHub
 * **Metodología de desarrollo** : SCRUM
 
@@ -40,7 +40,7 @@ Se ha adoptado la metodología  **SCRUM** , dividiendo el desarrollo en sprints 
 1. Clonar el repositorio:
 
    ```bash
-   git clone https://github.com/CRICAPOGA/DistriSoft.git
+   git clone https://github.com/CRICAPOGA/DistriRedes.git
    ```
 2. Instalar dependencias.
 

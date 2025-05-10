@@ -1,0 +1,67 @@
+{% extends 'base.html' %} {# Extiende la plantilla base.html para mantener la estructura general del sitio #}
+
+{% block title %}CATÁLOGO DE SERVICIOS{% endblock %}
+
+{% block content %}
+<!-- Contenedor principal con diseño centrado y fondo con degradado -->
+<div class="container-fluid d-flex justify-content-center align-items-center min-vh-100 px-3"
+    style="background: linear-gradient(135deg, #007bff, #28a745);">
+    <!-- Tarjeta con sombra y diseño responsivo para mostrar la información -->
+    <div class="card shadow-lg bg-white rounded-4 p-4 m-4 col-lg-9 col-md-10 col-sm-12">
+        <h2 class="text-center text-primary fw-bold mt-2 mb-4">Gestión de Servicios</h2>
+        <hr class="border-1 opacity-75 mt-1"> <!-- Línea divisoria -->
+
+        <!-- Notificaciones -->
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <!-- Barra de búsqueda y botón de agregar servicio -->
+        <div class="row mb-3 align-items-center">
+            <div class="col-md-6">
+                <form method="GET" action="{% url 'buscar_servicios' %}">
+                    <input type="text" class="form-control border-primary" name="q" placeholder="Buscar servicios..."
+                        value="{{ query|default:'' }}">
+                </form>
+            </div>
+            <div class="col-md-2 text-end">
+                <a href="{% url 'crear_servicio' %}" class="btn btn-success fw-bold shadow"> + Agregar </a>
+            </div>
+        </div>
+
+        <!-- Tabla de Servicios -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover rounded-3 overflow-hidden">
+                <thead class="text-white" style="background-color: rgba(17, 95, 198, 0.947);">
+                    <tr>
+                        <th class="text-center">Nombre</th>
+                        <th class="text-center">Descripción</th>
+                        <th class="text-center">Precio</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for servicio in servicios %}
+                    <tr>
+                        <td class="align-middle">{{ servicio.name }}</td>
+                        <td class="align-middle">{{ servicio.description }}</td>
+                        <td class="align-middle">${{ servicio.price }}</td>
+                        <td class="text-center align-middle">
+                            <a href="{% url 'editar_servicio' servicio.id %}"
+                                class="btn btn-warning btn-sm fw-bold shadow-sm">Editar</a>
+                            <a href="{% url 'eliminar_servicio' servicio.id %}"
+                                class="btn btn-danger btn-sm fw-bold shadow-sm">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

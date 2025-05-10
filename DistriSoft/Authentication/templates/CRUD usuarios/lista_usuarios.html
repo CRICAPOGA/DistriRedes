@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Usuarios{% endblock %}
+
+{% block content %}
+<div class="container-fluid d-flex justify-content-center align-items-center min-vh-100 px-3" 
+     style="background: linear-gradient(135deg, #007bff, #28a745);">
+    <div class="card shadow-lg bg-white rounded-4 p-4 m-4 col-lg-9 col-md-10 col-sm-12">
+        <h2 class="text-center text-primary fw-bold mt-2 mb-4">Gestión de Usuarios</h2>
+        <hr class="border-1 opacity-75 mt-1">
+
+        <!-- Notificaciones -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row mb-3 align-items-center">
+            <div class="col-md-2 text-end">
+                <a href="{% url 'crear_usuario' %}" class="btn btn-success fw-bold shadow"> + Agregar </a>
+            </div>
+        </div>
+
+        <!-- Tabla de Usuarios -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover rounded-3 overflow-hidden">
+                <thead class="text-white" style="background-color: rgba(17, 95, 198, 0.947);">
+                    <tr>
+                        <th class="text-center">Username</th>
+                        <th class="text-center">Email</th>
+                        <th class="text-center">Address</th>
+                        <th class="text-center">Phone</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for usuario in usuarios %}
+                        <tr>
+                            <td class="align-middle">{{ usuario.user.username }}</td>
+                            <td class="align-middle">{{ usuario.user.email }}</td>
+                            <td class="align-middle">{{ usuario.address }}</td>
+                            <td class="align-middle">{{ usuario.phone }}</td>
+                            <td class="text-center align-middle">
+                                <a href="{% url 'editar_usuario' usuario.id %}" class="btn btn-warning btn-sm fw-bold shadow-sm">Editar</a>
+                                <a href="{% url 'eliminar_usuario' usuario.id %}" class="btn btn-danger btn-sm fw-bold shadow-sm">Eliminar</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
